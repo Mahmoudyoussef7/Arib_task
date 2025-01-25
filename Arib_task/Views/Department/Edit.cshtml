@@ -1,0 +1,46 @@
+﻿@using Core.Entities
+@model Department
+
+@{
+    ViewData["Title"] = "Edit Department";
+}
+
+<h2>Edit Department</h2>
+
+<form id="editDepartmentForm" asp-action="EditAsync" method="post">
+    <input asp-for="Id" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#editDepartmentForm').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                url: '@Url.Action("EditAsync", "Department")',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    if (data.success) {
+                        window.location.href = '@Url.Action("Index", "Department")';
+                    } else {
+                        alert("Error: " + data.errors);
+                    }
+                },
+                error: function () {
+                    alert("An error occurred.");
+                }
+            });
+        });
+    });
+</script>

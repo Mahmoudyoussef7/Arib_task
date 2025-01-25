@@ -1,0 +1,32 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Departments";
+}
+
+<h2>Departments</h2>
+
+<div class="search-container">
+    <input type="text" id="searchString" placeholder="Search by Department Name" class="form-control" />
+    <button id="searchBtn" class="btn btn-primary">Search</button>
+</div>
+
+<div id="departmentTable">
+    @await Html.PartialAsync("_DepartmentList", Model)
+</div>
+
+<a asp-action="Add" class="btn btn-success">Add New Department</a>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#searchBtn').click(function () {
+        var searchString = $('#searchString').val();
+        $.ajax({
+            url: '@Url.Action("SearchAsync", "Department")',
+            data: { searchString: searchString },
+            success: function (result) {
+                $('#departmentTable').html(result); // Update department table with search results
+            }
+        });
+    });
+</script>

@@ -1,0 +1,36 @@
+﻿@model Core.Entities.Task
+@{
+    ViewData["Title"] = "Add New Task";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Add" method="post" id="addTaskForm">
+    <div class="form-group">
+        <label asp-for="Title" class="control-label"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AssignedToEmployeeId" class="control-label"></label>
+        <select asp-for="AssignedToEmployeeId" class="form-control" asp-items="ViewBag.Employees">
+            <option value="">Select an Employee</option>
+        </select>
+        <span asp-validation-for="AssignedToEmployeeId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Task</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

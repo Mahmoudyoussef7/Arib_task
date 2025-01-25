@@ -1,0 +1,65 @@
+﻿@using Arib_task.DTOs
+@model EmployeeDTO
+
+@{
+    ViewData["Title"] = "Add Employee";
+}
+
+<h2>Add Employee</h2>
+
+<form id="addEmployeeForm" asp-action="AddAsync" method="post">
+    <div class="form-group">
+        <label asp-for="FirstName" class="control-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LastName" class="control-label"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Salary" class="control-label"></label>
+        <input asp-for="Salary" type="number" class="form-control" />
+        <span asp-validation-for="Salary" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ManagerName" class="control-label"></label>
+        <input asp-for="ManagerName" class="form-control" />
+        <span asp-validation-for="ManagerName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" id="submitBtn" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+<!-- Validation messages -->
+<div id="validationSummary"></div>
+
+<script>
+    $(document).ready(function () {
+        $('#addEmployeeForm').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                url: '@Url.Action("AddAsync", "Employee")',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    if (data.success) {
+                        window.location.href = '@Url.Action("Index", "Employee")';
+                    } else {
+                        $('#validationSummary').html(data.errors);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $('#validationSummary').html('An error occurred while processing your request.');
+                }
+            });
+        });
+    });
+</script>

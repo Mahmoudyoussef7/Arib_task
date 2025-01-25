@@ -1,0 +1,26 @@
+﻿@model IEnumerable<dynamic>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Department Name</th>
+            <th>Employee Count</th>
+            <th>Total Salary</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var department in Model)
+        {
+            <tr>
+                <td>@department.Department.Name</td>
+                <td>@department.EmployeeCount</td>
+                <td>@department.TotalSalary</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@department.Department.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@department.Department.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

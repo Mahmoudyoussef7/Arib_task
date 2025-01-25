@@ -1,0 +1,54 @@
+﻿@using Arib_task.DTOs
+@model IEnumerable<EmployeeDTO>
+
+@{
+    ViewData["Title"] = "Employee List";
+}
+
+<h2>Employee List</h2>
+
+<!-- Search Form -->
+<div class="search-container">
+    <input type="text" id="searchString" placeholder="Search by Full Name" class="form-control" />
+    <button id="searchBtn" class="btn btn-primary">Search</button>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Salary</th>
+            <th>Manager</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="employeeList">
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.FullName</td>
+                <td>@employee.Salary</td>
+                <td>@employee.ManagerName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@employee.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@employee.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Script for search functionality -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#searchBtn').click(function () {
+        var searchString = $('#searchString').val();
+        $.ajax({
+            url: '@Url.Action("SearchAsync", "Employee")',
+            data: { searchString: searchString },
+            success: function (result) {
+                $('#employeeList').html(result);
+            }
+        });
+    });
+</script>

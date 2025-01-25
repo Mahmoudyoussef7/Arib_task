@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Core.Entities.Task>
+@{
+    ViewData["Title"] = "Employee Tasks";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Task Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.TaskName</td>
+                <td>@task.Description</td>
+                <td>@task.Status</td>
+                <td>
+                    <form asp-action="ChangeStatus" asp-route-taskId="@task.Id" method="post" class="task-status-form">
+                        <div class="form-group">
+                            <select name="newStatus" class="form-control" onchange="this.form.submit()">
+                                <option value="Pending" @(task.Status == TaskStatus.Pending ? "selected" : "")>Pending</option>
+                                <option value="InProgress" @(task.Status == TaskStatus.InProgress ? "selected" : "")>In Progress</option>
+                                <option value="Completed" @(task.Status == TaskStatus.Completed ? "selected" : "")>Completed</option>
+                                <option value="OnHold" @(task.Status == TaskStatus.OnHold ? "selected" : "")>On Hold</option>
+                            </select>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Core.Entities.Task>
+
+<h2>My Tasks</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Task Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>@task.Description</td>
+                <td>@task.Status</td>
+                <td>
+                    <form asp-action="ChangeStatus" asp-route-taskId="@task.Id" method="post" class="d-inline">
+                        <div class="form-group">
+                            <select name="newStatus" class="form-control" onchange="this.form.submit()">
+                                <option value="Pending" selected="@(task.Status == "Pending" ? "selected" : "")">Pending</option>
+                                <option value="InProgress" selected="@(task.Status == "InProgress" ? "selected" : "")">In Progress</option>
+                            <option value="Completed" selected="@(task.Status == "Completed" ? "selected" : "")">Completed</option>
+                            <option value="OnHold" selected="@(task.Status == "OnHold" ? "selected" : "")">On Hold</option>
+                            </select>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $('form').on('submit', function (e) {
+        e.preventDefault();
+
+        var form = $(this);
+        var taskId = form.find('select[name="newStatus"]').data('taskId');
+        var newStatus = form.find('select[name="newStatus"]').val();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeStatus")',
+            data: { taskId: taskId, newStatus: newStatus },
+            success: function (response) {
+                if (response.success) {
+                    alert('Status updated successfully');
+                    location.reload(); 
+                } else {
+                    alert('Failed to update status');
+                }
+            },
+            error: function () {
+                alert('An error occurred while updating the status');
+            }
+        });
+    });
+</script>

@@ -1,0 +1,62 @@
+[
+  {
+    "Id": "user123",
+    "UserName": "john.doe@example.com",
+    "NormalizedUserName": "JOHN.DOE@EXAMPLE.COM",
+    "Email": "john.doe@example.com",
+    "NormalizedEmail": "JOHN.DOE@EXAMPLE.COM",
+    "EmailConfirmed": true,
+    "PasswordHash": "hashedpassword123",
+    "SecurityStamp": "stamp123",
+    "PhoneNumber": "+1234567890",
+    "PhoneNumberConfirmed": true,
+    "TwoFactorEnabled": false,
+    "LockoutEnabled": false,
+    "AccessFailedCount": 0
+  },
+  {
+    "Id": "user456",
+    "UserName": "jane.smith@example.com",
+    "NormalizedUserName": "JANE.SMITH@EXAMPLE.COM",
+    "Email": "jane.smith@example.com",
+    "NormalizedEmail": "JANE.SMITH@EXAMPLE.COM",
+    "EmailConfirmed": true,
+    "PasswordHash": "hashedpassword456",
+    "SecurityStamp": "stamp456",
+    "PhoneNumber": "+1987654321",
+    "PhoneNumberConfirmed": true,
+    "TwoFactorEnabled": false,
+    "LockoutEnabled": false,
+    "AccessFailedCount": 0
+  },
+  {
+    "Id": "user789",
+    "UserName": "alice.johnson@example.com",
+    "NormalizedUserName": "ALICE.JOHNSON@EXAMPLE.COM",
+    "Email": "alice.johnson@example.com",
+    "NormalizedEmail": "ALICE.JOHNSON@EXAMPLE.COM",
+    "EmailConfirmed": true,
+    "PasswordHash": "hashedpassword789",
+    "SecurityStamp": "stamp789",
+    "PhoneNumber": "+1029384756",
+    "PhoneNumberConfirmed": true,
+    "TwoFactorEnabled": false,
+    "LockoutEnabled": false,
+    "AccessFailedCount": 0
+  },
+  {
+    "Id": "user101",
+    "UserName": "bob.williams@example.com",
+    "NormalizedUserName": "BOB.WILLIAMS@EXAMPLE.COM",
+    "Email": "bob.williams@example.com",
+    "NormalizedEmail": "BOB.WILLIAMS@EXAMPLE.COM",
+    "EmailConfirmed": true,
+    "PasswordHash": "hashedpassword101",
+    "SecurityStamp": "stamp101",
+    "PhoneNumber": "+5647382910",
+    "PhoneNumberConfirmed": true,
+    "TwoFactorEnabled": false,
+    "LockoutEnabled": false,
+    "AccessFailedCount": 0
+  }
+]

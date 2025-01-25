@@ -11,8 +11,7 @@ using System.Security.Claims;
 namespace Arib_task.Controllers;
 public class AccountController(
         UserManager<AppUser> _userManager,
-        SignInManager<AppUser> _signInManager,
-        ITokenService _tokenService)
+        SignInManager<AppUser> _signInManager)
     : Controller
 {
     
@@ -85,20 +84,6 @@ public class AccountController(
         return RedirectToAction("Login");
     }
 
-    [Authorize]
-    public async Task<IActionResult> Profile()
-    {
-        var user = await FindByEmailFromClaimsPrincipal(User);
-        var userDto = new UserDTO
-        {
-            Email = user.Email,
-            DisplayName = user.UserName,
-            Token = _tokenService.GenerateToken(user)
-        };
-
-        return View(userDto); 
-    }
-
     [HttpGet]
     public async Task<JsonResult> EmailExists(string email)
     {
@@ -115,6 +100,4 @@ public class AccountController(
         return RedirectToAction("Login");
     }
 
-    private async Task<AppUser> FindByEmailFromClaimsPrincipal(ClaimsPrincipal user) =>
-            await _userManager.Users.SingleOrDefaultAsync(x => x.Email == user.FindFirstValue(ClaimTypes.Email));
 }

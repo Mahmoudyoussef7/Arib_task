@@ -15,14 +15,27 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         _context = context;
     }
 
-    public async Task<T> GetByIdAsync(int id)
+    public async Task<T> GetByIdAsync(int id, List<Expression<Func<T, object>>>? includes = null)
     {
-        return await _context.Set<T>().FindAsync(id);
+        var query = _context.Set<T>().AsQueryable();
+
+        if (includes != null && includes.Any())
+        {
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+        }
+
+        return await query.FirstOrDefaultAsync(i => EF.Property<int>(i, "Id") == id)
+                ?? throw new Exception("Not Found");
     }
 
-    public async Task<IReadOnlyList<T>> ListAllAsync()
+    public async Task<IReadOnlyList<T>> ListAllAsync(List<Expression<Func<T, object>>>? includes = null)
     {
-        return await _context.Set<T>().ToListAsync();
+        var query = _context.Set<T>().AsQueryable();
+        if (includes != null && includes.Any())
+        {
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+        }
+        return await query.ToListAsync();
     }
 
     public async Task AddAsync(T entity)
@@ -43,13 +56,25 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         await _context.SaveChangesAsync();
     }
 
-    public async Task<T> GetByConditionAsync(Expression<Func<T, bool>> expression)
+    public async Task<T> GetByConditionAsync(Expression<Func<T, bool>> expression, List<Expression<Func<T, object>>>? includes = null)
     {
-        return await _context.Set<T>().FirstOrDefaultAsync(expression)?? throw new Exception("Not found");
+        var query = _context.Set<T>().AsQueryable();
+
+        if (includes != null && includes.Any())
+        {
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+        }
+
+        return await query.FirstOrDefaultAsync(expression)?? throw new Exception("Not Found");
     }
 
-    public async Task<IReadOnlyList<T>> ListAllByConditionAsync(Expression<Func<T, bool>> expression)
+    public async Task<IReadOnlyList<T>> ListAllByConditionAsync(Expression<Func<T, bool>> expression, List<Expression<Func<T, object>>>? includes = null)
     {
-        return await _context.Set<T>().Where(expression).ToListAsync();
+        var query = _context.Set<T>().Where(expression);
+        if(includes != null && includes.Any())
+        {
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+        }
+        return await query.ToListAsync();
     }
 }

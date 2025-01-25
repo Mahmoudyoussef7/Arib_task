@@ -5,39 +5,73 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Task Name</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var task in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
             <tr>
-                <td>@task.TaskName</td>
-                <td>@task.Description</td>
-                <td>@task.Status</td>
-                <td>
-                    <form asp-action="ChangeStatus" asp-route-taskId="@task.Id" method="post" class="task-status-form">
-                        <div class="form-group">
-                            <select name="newStatus" class="form-control" onchange="this.form.submit()">
-                                <option value="Pending" @(task.Status == TaskStatus.Pending ? "selected" : "")>Pending</option>
-                                <option value="InProgress" @(task.Status == TaskStatus.InProgress ? "selected" : "")>In Progress</option>
-                                <option value="Completed" @(task.Status == TaskStatus.Completed ? "selected" : "")>Completed</option>
-                                <option value="OnHold" @(task.Status == TaskStatus.OnHold ? "selected" : "")>On Hold</option>
-                            </select>
-                        </div>
-                    </form>
-                </td>
+                <th scope="col">Task Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var task in Model)
+                {
+                    <tr>
+                        <td>@task.Title</td>
+                        <td>@task.Description</td>
+                        <td>@task.Status</td>
+                        <td>
+                            <form asp-action="ChangeStatus" asp-route-taskId="@task.Id" method="post" class="task-status-form">
+                                <div class="form-group">
+                                    <select name="newStatus" class="form-control" onchange="this.form.submit()">
+                                        <option value="Pending" selected="@(task.Status == "Pending" ? "selected" : null)">Pending</option>
+                                        <option value="InProgress" selected="@(task.Status == "InProgress" ? "selected" : null)">In Progress</option>
+                                        <option value="Completed" selected="@(task.Status == "Completed" ? "selected" : null)">Completed</option>
+                                        <option value="OnHold" selected="@(task.Status == "OnHold" ? "selected" : null)">On Hold</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center">No tasks available.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.3/jquery.validate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $('form').on('submit', function (e) {
+        e.preventDefault();
+
+        var form = $(this);
+        var taskId = form.find('select[name="newStatus"]').data('taskId');
+        var newStatus = form.find('select[name="newStatus"]').val();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeStatus")',
+            data: { taskId: taskId, newStatus: newStatus },
+            success: function (response) {
+                if (response.success) {
+                    alert('Status updated successfully');
+                    location.reload();
+                } else {
+                    alert('Failed to update status');
+                }
+            },
+            error: function () {
+                alert('An error occurred while updating the status');
+            }
+        });
+    });
+</script>

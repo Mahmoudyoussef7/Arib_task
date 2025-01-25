@@ -18,34 +18,11 @@ public class AppDbContext : IdentityDbContext<AppUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
         modelBuilder.Entity<Employee>()
-            .HasOne(e => e.Manager)
-            .WithMany(m => m.Subordinates)
-            .HasForeignKey(e => e.ManagerId)
-            .OnDelete(DeleteBehavior.Restrict);
+           .HasMany(e => e.Tasks)               
+           .WithOne(t => t.AssignedToEmployee)   
+           .HasForeignKey(t => t.AssignedToEmployeeId) 
+           .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Employee>()
-            .HasOne(e => e.ApplicationUser)
-            .WithOne(au => au.Employee)
-            .HasForeignKey<Employee>(e => e.ApplicationUserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Department>()
-            .HasMany(d => d.Employees)
-            .WithOne()
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder.Entity<Task>()
-            .HasOne(t => t.AssignedToEmployee)
-            .WithMany(e => e.Tasks)
-            .HasForeignKey(t => t.AssignedToEmployeeId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Task>()
-            .HasOne(t => t.Manager)
-            .WithMany()
-            .HasForeignKey(t => t.ManagerId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

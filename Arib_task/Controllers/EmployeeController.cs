@@ -11,8 +11,6 @@ namespace Arib_task.Controllers;
 public class EmployeeController(IGenericRepository<Employee> _EmpRepository) : Controller
 {
     
-    private static int _idCounter = 1;
-
     public IActionResult Index()
     {
         return View(_EmpRepository.ListAllAsync());

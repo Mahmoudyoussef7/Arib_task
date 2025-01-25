@@ -1,0 +1,42 @@
+[
+  {
+    "Id": 1,
+    "FirstName": "John",
+    "LastName": "Doe",
+    "Email": "john.doe@example.com",
+    "PhoneNumber": "+1234567890",
+    "DepartmentId": 1,
+    "ManagerId": null,
+    "ApplicationUserId": "user123"
+  },
+  {
+    "Id": 2,
+    "FirstName": "Jane",
+    "LastName": "Smith",
+    "Email": "jane.smith@example.com",
+    "PhoneNumber": "+1987654321",
+    "DepartmentId": 2,
+    "ManagerId": 1,
+    "ApplicationUserId": "user456"
+  },
+  {
+    "Id": 3,
+    "FirstName": "Alice",
+    "LastName": "Johnson",
+    "Email": "alice.johnson@example.com",
+    "PhoneNumber": "+1029384756",
+    "DepartmentId": 3,
+    "ManagerId": 1,
+    "ApplicationUserId": "user789"
+  },
+  {
+    "Id": 4,
+    "FirstName": "Bob",
+    "LastName": "Williams",
+    "Email": "bob.williams@example.com",
+    "PhoneNumber": "+5647382910",
+    "DepartmentId": 4,
+    "ManagerId": 2,
+    "ApplicationUserId": "user101"
+  }
+]

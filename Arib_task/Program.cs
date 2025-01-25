@@ -3,11 +3,9 @@ using Core.Identity;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
-using Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,32 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentityCore<AppUser>(opt =>
-{
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+    options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
-})
-.AddEntityFrameworkStores<AppDbContext>()
-.AddSignInManager<SignInManager<AppUser>>();
 
-var jwt = builder.Configuration.GetSection("Token");
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = true,
-            ValidIssuer = jwt["Issuer"],
-            ValidateAudience = false
-
-        };
-    });
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
@@ -67,5 +49,19 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+try
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    // Migrate database while launching app 
+    await context.Database.MigrateAsync();
+    await ContextSeed.SeedAsync(context);
+}
+catch (Exception ex)
+{
+    throw ex;
+}
 
 app.Run();

@@ -26,9 +26,6 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
@@ -50,17 +47,14 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<string>("AppUserId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FirstName")
@@ -89,7 +83,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId")
+                    b.HasIndex("AppUserId")
                         .IsUnique();
 
                     b.HasIndex("DepartmentId");
@@ -124,9 +118,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -343,21 +334,23 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Core.Identity.AppUser", "ApplicationUser")
                         .WithOne("Employee")
-                        .HasForeignKey("Core.Entities.Employee", "ApplicationUserId")
+                        .HasForeignKey("Core.Entities.Employee", "AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.Department", null)
+                    b.HasOne("Core.Entities.Department", "Department")
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Core.Entities.Employee", "Manager")
                         .WithMany("Subordinates")
-                        .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ManagerId");
 
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Department");
 
                     b.Navigation("Manager");
                 });
@@ -373,7 +366,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Core.Entities.Employee", "Manager")
                         .WithMany()
                         .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AssignedToEmployee");

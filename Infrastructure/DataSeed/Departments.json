@@ -1,0 +1,22 @@
+[
+  {
+    "Id": 1,
+    "Name": "HR",
+    "Description": "Human Resources department responsible for employee management and recruitment."
+  },
+  {
+    "Id": 2,
+    "Name": "IT",
+    "Description": "Information Technology department managing infrastructure and software development."
+  },
+  {
+    "Id": 3,
+    "Name": "Finance",
+    "Description": "Finance department managing budgeting, accounting, and financial reporting."
+  },
+  {
+    "Id": 4,
+    "Name": "Marketing",
+    "Description": "Marketing department responsible for advertising, customer engagement, and branding."
+  }
+]

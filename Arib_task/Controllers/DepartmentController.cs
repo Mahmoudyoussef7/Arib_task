@@ -76,8 +76,8 @@ public class DepartmentController(UserManager<AppUser> _userManager, IGenericRep
             return Json(new { success = false, message = "Cannot delete department with employees assigned." });
         }
 
-        var userId = User.Identity.Name;
-        var user = await _employeeRepository.GetByConditionAsync(u => u.ApplicationUser.UserName == userId);
+        var userId = _userManager.GetUserId(User);
+        var user = await _employeeRepository.GetByConditionAsync(u => u.AppUserId == userId);
 
         if (user == null)
         {

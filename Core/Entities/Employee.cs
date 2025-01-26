@@ -8,7 +8,7 @@ public class Employee:BaseEntity
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public decimal Salary { get; set; }
-    public string ImagePath { get; set; }
+    public string? ImagePath { get; set; }
     public int? ManagerId { get; set; }
     public int DepartmentId { get; set; }
     public string AppUserId { get; set; }

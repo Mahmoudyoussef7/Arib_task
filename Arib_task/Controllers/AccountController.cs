@@ -14,39 +14,38 @@ public class AccountController(
         SignInManager<AppUser> _signInManager)
     : Controller
 {
-    
+
 
     [HttpGet]
     public IActionResult Login()
     {
-        return View(); 
+        return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginDTO loginDto)
     {
+
         if (!ModelState.IsValid)
         {
-            return View(loginDto);
+            return Json(new { success = false, message = "Invalid input data." });
         }
 
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
-        if (user == null)
+        if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
         {
-            TempData["Error"] = "Invalid login attempt.";
-            return View(loginDto);
+            return Json(new { success = false, message = "Invalid login attempt." });
         }
 
         var result = await _signInManager.PasswordSignInAsync(user, loginDto.Password, false, false);
-        if (!result.Succeeded)
+        if (result.Succeeded)
         {
-            TempData["Error"] = "Invalid login attempt.";
-            return View(loginDto);
+            return Json(new { success = true, message = "Login successful!" });
         }
 
-        TempData["Success"] = "Login successful!";
-        return RedirectToAction("Index", "Home"); 
+        return Json(new { success = false, message = "Invalid login attempt." });
+
     }
 
     [HttpGet]
@@ -81,7 +80,7 @@ public class AccountController(
         }
 
         TempData["Success"] = "Registration successful! You can now log in.";
-        return RedirectToAction("Login");
+        return RedirectToAction("Login", "Account");
     }
 
     [HttpGet]

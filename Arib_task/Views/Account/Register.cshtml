@@ -1,0 +1,57 @@
+﻿@using Arib_task.DTOs
+@model RegisterDTO
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Register" method="post" class="form-horizontal">
+    <div class="form-group">
+        <label for="DisplayName" class="control-label">Display Name</label>
+        <input type="text" asp-for="DisplayName" class="form-control" />
+        <span asp-validation-for="DisplayName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Email" class="control-label">Email</label>
+        <input type="email" asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Password" class="control-label">Password</label>
+        <input type="password" asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="ConfirmPassword" class="control-label">Confirm Password</label>
+        <input type="password" asp-for="ConfirmPassword" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+</form>
+
+@if (TempData["Success"] != null)
+{
+    <script>
+        alert('@TempData["Success"]');
+    </script>
+}
+
+<div>
+    <p>Already have an account? <a asp-action="Login">Login here</a></p>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

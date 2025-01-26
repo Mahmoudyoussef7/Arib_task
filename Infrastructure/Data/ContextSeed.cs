@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,12 @@ public static class ContextSeed
 {
     public static async Task SeedAsync(AppDbContext context)
     {
+        if (!context.Users.Any())
+        {
+            var usersData = File.ReadAllText("../Infrastructure/DataSeed/Users.json");
+            var users = JsonSerializer.Deserialize<List<AppUser>>(usersData);
+            await context.Users.AddRangeAsync(users);
+        }
         if (!context.Departments.Any())
         {
             var departmentData = File.ReadAllText("../Infrastructure/DataSeed/Departments.json");
@@ -28,7 +35,7 @@ public static class ContextSeed
 
         if (!context.Tasks.Any())
         {
-            var tasksData = File.ReadAllText("../Infrastructure/Data/SeedData/Tasks.json");
+            var tasksData = File.ReadAllText("../Infrastructure/DataSeed/Tasks.json");
             var tasks = JsonSerializer.Deserialize<List<Core.Entities.Task>>(tasksData);
             await context.Tasks.AddRangeAsync(tasks);
         }

@@ -50,18 +50,18 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-try
-{
-    using var scope = app.Services.CreateScope();
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
-    // Migrate database while launching app 
-    await context.Database.MigrateAsync();
-    await ContextSeed.SeedAsync(context);
-}
-catch (Exception ex)
-{
-    throw ex;
-}
+//try
+//{
+//    using var scope = app.Services.CreateScope();
+//    var services = scope.ServiceProvider;
+//    var context = services.GetRequiredService<AppDbContext>();
+//    // Migrate database while launching app 
+//    await context.Database.MigrateAsync();
+//    await ContextSeed.SeedAsync(context);
+//}
+//catch (Exception ex)
+//{
+//    throw ex;
+//}
 
 app.Run();
